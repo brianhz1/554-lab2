@@ -9,13 +9,15 @@ module line_buffer_param
 	input en,	// shift if high
 	input [depth-1:0] d_shift_in,
 	output [depth-1:0] d_out_0, // first in
-	output [depth-1:0] d_out_1	// second in
+	output [depth-1:0] d_out_1,	// second in
+	output [depth-1:0] d_out_2	// third in
 );
 
 	logic [depth-1:0] data [0:width-1];
 	
 	assign d_out_0 = data[width-1];
 	assign d_out_1 = data[width-2];
+	assign d_out_2 = data[width-3];
 	
 	always_ff @(posedge clk, negedge rst_n) begin
 		if (!rst_n) begin
