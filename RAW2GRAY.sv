@@ -24,44 +24,39 @@ wire	[11:0]	mDATA_0;
 wire	[11:0]	mDATA_1;
 reg		[11:0]	mDATAd_0;
 reg		[11:0]	mDATAd_1;
-reg		[11:0]	mCCD_R;
-reg		[12:0]	mCCD_G;
-reg		[11:0]	mCCD_B;
+reg		[13:0]	mCCD;
 reg				mDVAL;
 
-assign	oRed	=	mCCD_R[11:0];
-assign	oGreen	=	mCCD_G[12:1];
-assign	oBlue	=	mCCD_B[11:0];
+assign	oRed	=	mCCD[13:2];
+assign	oGreen	=	mCCD[13:2];
+assign	oBlue	=	mCCD[13:2];
 assign	oDVAL	=	mDVAL;
 
-Line_Buffer1 	u0	(	.clken(iDVAL),
-						.clock(iCLK),
-						.shiftin(iDATA),
-						.taps0x(mDATA_1),
-						.taps1x(mDATA_0)	);
+line_buffer_param u_line_buffer_param (
+	.clk(iCLK),
+	.rst_n(iRST),
+	.en(iDVAL),	// shift if high
+	.d_shift_in(mDATAd_0),
+	.d_out_0(mDATA_0), // first in
+	.d_out_1(mDATA_1)	// second in
+);
 
 always@(posedge iCLK or negedge iRST)
 begin
 	if(!iRST)
 	begin
-		mCCD_R	<=	0;
-		mCCD_G	<=	0;
-		mCCD_B	<=	0;
+		mCCD <= 0;
 		mDATAd_0<=	0;
 		mDATAd_1<=	0;
 		mDVAL	<=	0;
 	end
 	else
 	begin
-		mDATAd_0	<=	mDATA_0;
-		mDATAd_1	<=	mDATA_1;
+		mDATAd_0	<=	mDATAd_1;
+		mDATAd_1	<=	iDATA;
 		mDVAL		<=	{iY_Cont[0]|iX_Cont[0]}	?	1'b0	:	iDVAL;
-		
-		mCCD_R <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1)/4;
-		mCCD_G <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1)/4;
-		mCCD_B <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1)/4;
+		mCCD <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1);
 	end
 end
 
-endmodule		
-
+endmodule	
