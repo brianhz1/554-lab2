@@ -9,10 +9,7 @@ module imgproc (
     output oDVAL,
     input [15:0] iX_Cont,
     input [15:0] iY_Cont,
-    input iSW,
+    input iSW
 );
 
-
-RAW2GRAY g1();
-
-endmodule;
+endmodule
