@@ -1,4 +1,4 @@
-module RAW2GRAY (oRed,
+module RAW2GRAY_test (oRed,
 				 oGreen,
 				 oBlue,
 				 oDVAL,
@@ -26,14 +26,11 @@ reg		[11:0]	mDATAd_0;
 reg		[11:0]	mDATAd_1;
 reg		[13:0]	mCCD;
 reg				mDVAL;
-reg				mDVAL_pipe;
 
-// copy value to R, G, B lines
 assign	oRed	=	mCCD[13:2];
 assign	oGreen	=	mCCD[13:2];
 assign	oBlue	=	mCCD[13:2];
-
-assign	oDVAL	=	mDVAL_pipe;
+assign	oDVAL	=	mDVAL;
 
 line_buffer_param u_line_buffer_param (
 	.clk(iCLK),
@@ -52,17 +49,13 @@ begin
 		mDATAd_0<=	0;
 		mDATAd_1<=	0;
 		mDVAL	<=	0;
-		mDVAL_pipe <= 0;
 	end
 	else
 	begin
-		if (iDVAL) begin
-			mDATAd_0	<=	mDATAd_1;
-			mDATAd_1	<=	iDATA;
-		end
-		mDVAL		<=	(iX_Cont[0] & iY_Cont[0]) ? iDVAL: 1'b0; // set dval on odd pixels
-		mDVAL_pipe <= mDVAL;
-		mCCD <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1); // add four bayer values
+		mDATAd_0	<=	mDATAd_1;
+		mDATAd_1	<=	iDATA;
+		mDVAL		<=	{iY_Cont[0]|iX_Cont[0]}	?	1'b0	:	iDVAL;
+		mCCD <= (mDATA_0+mDATAd_0+mDATA_1+mDATAd_1);
 	end
 end
 

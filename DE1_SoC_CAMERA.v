@@ -36,63 +36,190 @@
 
 module DE1_SoC_CAMERA(
 
-	//////////// CLOCK //////////
-	input 		          		CLOCK2_50,
-	input 		          		CLOCK3_50,
-	input 		          		CLOCK4_50,
-	input 		          		CLOCK_50,
+      ///////// ADC /////////
+      inout              ADC_CS_N,
+      output             ADC_DIN,
+      input              ADC_DOUT,
+      output             ADC_SCLK,
 
-	//////////// SDRAM //////////
-	output		    [12:0]		DRAM_ADDR,
-	output		     [1:0]		DRAM_BA,
-	output		          		DRAM_CAS_N,
-	output		          		DRAM_CKE,
-	output		          		DRAM_CLK,
-	output		          		DRAM_CS_N,
-	inout 		    [15:0]		DRAM_DQ,
-	output		          		DRAM_LDQM,
-	output		          		DRAM_RAS_N,
-	output		          		DRAM_UDQM,
-	output		          		DRAM_WE_N,
+      ///////// AUD /////////
+      input              AUD_ADCDAT,
+      inout              AUD_ADCLRCK,
+      inout              AUD_BCLK,
+      output             AUD_DACDAT,
+      inout              AUD_DACLRCK,
+      output             AUD_XCK,
 
-	//////////// SEG7 //////////
-	output		     [6:0]		HEX0,
-	output		     [6:0]		HEX1,
-	output		     [6:0]		HEX2,
-	output		     [6:0]		HEX3,
-	output		     [6:0]		HEX4,
-	output		     [6:0]		HEX5,
+      ///////// CLOCK2 /////////
+      input              CLOCK2_50,
 
-	//////////// KEY //////////
-	input 		     [3:0]		KEY,
+      ///////// CLOCK3 /////////
+      input              CLOCK3_50,
 
-	//////////// LED //////////
-	output		     [9:0]		LEDR,
+      ///////// CLOCK4 /////////
+      input              CLOCK4_50,
 
-	//////////// SW //////////
-	input 		     [9:0]		SW,
+      ///////// CLOCK /////////
+      input              CLOCK_50,
 
-	//////////// VGA //////////
-	output		          		VGA_BLANK_N,
-	output		     [7:0]		VGA_B,
-	output		          		VGA_CLK,
-	output		     [7:0]		VGA_G,
-	output		          		VGA_HS,
-	output		     [7:0]		VGA_R,
-	output		          		VGA_SYNC_N,
-	output		          		VGA_VS,
+      ///////// DRAM /////////
+      output      [12:0] DRAM_ADDR,
+      output      [1:0]  DRAM_BA,
+      output             DRAM_CAS_N,
+      output             DRAM_CKE,
+      output             DRAM_CLK,
+      output             DRAM_CS_N,
+      inout       [15:0] DRAM_DQ,
+      output             DRAM_LDQM,
+      output             DRAM_RAS_N,
+      output             DRAM_UDQM,
+      output             DRAM_WE_N,
 
-	//////////// GPIO_1, GPIO_1 connect to D5M - 5M Pixel Camera //////////
-	input 		    [11:0]		D5M_D,
-	input 		          		D5M_FVAL,
-	input 		          		D5M_LVAL,
-	input 		          		D5M_PIXCLK,
-	output		          		D5M_RESET_N,
-	output		          		D5M_SCLK,
-	inout 		          		D5M_SDATA,
-	input 		          		D5M_STROBE,
-	output		          		D5M_TRIGGER,
-	output		          		D5M_XCLKIN
+      ///////// FAN /////////
+      output             FAN_CTRL,
+
+      ///////// FPGA /////////
+      output             FPGA_I2C_SCLK,
+      inout              FPGA_I2C_SDAT,
+
+      ///////// GPIO /////////
+      inout     [35:0]   GPIO_0,
+	
+      ///////// HEX0 /////////
+      output      [6:0]  HEX0,
+
+      ///////// HEX1 /////////
+      output      [6:0]  HEX1,
+
+      ///////// HEX2 /////////
+      output      [6:0]  HEX2,
+
+      ///////// HEX3 /////////
+      output      [6:0]  HEX3,
+
+      ///////// HEX4 /////////
+      output      [6:0]  HEX4,
+
+      ///////// HEX5 /////////
+      output      [6:0]  HEX5,
+
+`ifdef ENABLE_HPS
+      ///////// HPS /////////
+      input              HPS_CONV_USB_N,
+      output      [14:0] HPS_DDR3_ADDR,
+      output      [2:0]  HPS_DDR3_BA,
+      output             HPS_DDR3_CAS_N,
+      output             HPS_DDR3_CKE,
+      output             HPS_DDR3_CK_N,
+      output             HPS_DDR3_CK_P,
+      output             HPS_DDR3_CS_N,
+      output      [3:0]  HPS_DDR3_DM,
+      inout       [31:0] HPS_DDR3_DQ,
+      inout       [3:0]  HPS_DDR3_DQS_N,
+      inout       [3:0]  HPS_DDR3_DQS_P,
+      output             HPS_DDR3_ODT,
+      output             HPS_DDR3_RAS_N,
+      output             HPS_DDR3_RESET_N,
+      input              HPS_DDR3_RZQ,
+      output             HPS_DDR3_WE_N,
+      output             HPS_ENET_GTX_CLK,
+      inout              HPS_ENET_INT_N,
+      output             HPS_ENET_MDC,
+      inout              HPS_ENET_MDIO,
+      input              HPS_ENET_RX_CLK,
+      input       [3:0]  HPS_ENET_RX_DATA,
+      input              HPS_ENET_RX_DV,
+      output      [3:0]  HPS_ENET_TX_DATA,
+      output             HPS_ENET_TX_EN,
+      inout       [3:0]  HPS_FLASH_DATA,
+      output             HPS_FLASH_DCLK,
+      output             HPS_FLASH_NCSO,
+      inout              HPS_GSENSOR_INT,
+      inout              HPS_I2C1_SCLK,
+      inout              HPS_I2C1_SDAT,
+      inout              HPS_I2C2_SCLK,
+      inout              HPS_I2C2_SDAT,
+      inout              HPS_I2C_CONTROL,
+      inout              HPS_KEY,
+      inout              HPS_LED,
+      inout              HPS_LTC_GPIO,
+      output             HPS_SD_CLK,
+      inout              HPS_SD_CMD,
+      inout       [3:0]  HPS_SD_DATA,
+      output             HPS_SPIM_CLK,
+      input              HPS_SPIM_MISO,
+      output             HPS_SPIM_MOSI,
+      inout              HPS_SPIM_SS,
+      input              HPS_UART_RX,
+      output             HPS_UART_TX,
+      input              HPS_USB_CLKOUT,
+      inout       [7:0]  HPS_USB_DATA,
+      input              HPS_USB_DIR,
+      input              HPS_USB_NXT,
+      output             HPS_USB_STP,
+`endif /*ENABLE_HPS*/
+
+      ///////// IRDA /////////
+      input              IRDA_RXD,
+      output             IRDA_TXD,
+
+      ///////// KEY /////////
+      input       [3:0]  KEY,
+
+      ///////// LEDR /////////
+      output      [9:0]  LEDR,
+
+      ///////// PS2 /////////
+      inout              PS2_CLK,
+      inout              PS2_CLK2,
+      inout              PS2_DAT,
+      inout              PS2_DAT2,
+
+      ///////// SW /////////
+      input       [9:0]  SW,
+
+      ///////// TD /////////
+      input              TD_CLK27,
+      input      [7:0]   TD_DATA,
+      input              TD_HS,
+      output             TD_RESET_N,
+      input              TD_VS,
+
+`ifdef ENABLE_USB
+      ///////// USB /////////
+      input              USB_B2_CLK,
+      inout       [7:0]  USB_B2_DATA,
+      output             USB_EMPTY,
+      output             USB_FULL,
+      input              USB_OE_N,
+      input              USB_RD_N,
+      input              USB_RESET_N,
+      inout              USB_SCL,
+      inout              USB_SDA,
+      input              USB_WR_N,
+`endif /*ENABLE_USB*/
+
+      ///////// VGA /////////
+      output      [7:0]  VGA_B,
+      output             VGA_BLANK_N,
+      output             VGA_CLK,
+      output      [7:0]  VGA_G,
+      output             VGA_HS,
+      output      [7:0]  VGA_R,
+      output             VGA_SYNC_N,
+      output             VGA_VS,
+		
+		//////////// GPIO1, GPIO1 connect to D5M - 5M Pixel Camera //////////
+	   input		   [11:0] D5M_D,
+      input		          D5M_FVAL,
+      input		          D5M_LVAL,
+      input		          D5M_PIXLCLK,
+      output		       D5M_RESET_N,
+      output		       D5M_SCLK,
+      inout		          D5M_SDATA,
+      input		          D5M_STROBE,
+      output		       D5M_TRIGGER,
+      output		       D5M_XCLKIN
 );
 
 
@@ -115,24 +242,13 @@ wire								DLY_RST_2;
 wire								DLY_RST_3;
 wire								DLY_RST_4;
 wire								Read;
-reg		    [11:0]			rCCD_DATA[0:2];
-reg								rCCD_LVAL[0:2];
-reg								rCCD_FVAL[0:2];
-
-wire	       [11:0]			dCCD_R;
-wire	       [11:0]			dCCD_G;
-wire	       [11:0]			dCCD_B;
-wire							dCCD_DVAL;
-
-wire	       [11:0]			pCCD_R;
-wire	       [11:0]			pCCD_G;
-wire	       [11:0]			pCCD_B;
-wire							pCCD_DVAL;
-
+reg		    [11:0]			rCCD_DATA;
+reg								rCCD_LVAL;
+reg								rCCD_FVAL;
 wire	       [11:0]			sCCD_R;
 wire	       [11:0]			sCCD_G;
 wire	       [11:0]			sCCD_B;
-wire							sCCD_DVAL;
+wire								sCCD_DVAL;
 
 wire								sdram_ctrl_clk;
 wire	       [9:0]			oVGA_R;   				//	VGA Red[9:0]
@@ -150,25 +266,19 @@ assign	D5M_RESET_N	=	DLY_RST_1;
 
 assign   VGA_CTRL_CLK = VGA_CLK;
 
-assign	LEDR[9:4]	=	Y_Cont;
+assign	LEDR		=	Y_Cont;
 
 //fetch the high 8 bits
-assign  VGA_R = SW[1]?(|oVGA_R[9:8]?8'hff:oVGA_R[7:0]):oVGA_R[9:2];
-assign  VGA_G = SW[1]?(|oVGA_G[9:8]?8'hff:oVGA_G[7:0]):oVGA_G[9:2];
-assign  VGA_B = SW[1]?(|oVGA_B[9:8]?8'hff:oVGA_B[7:0]):oVGA_B[9:2];
+assign  VGA_R = oVGA_R[9:2];
+assign  VGA_G = oVGA_G[9:2];
+assign  VGA_B = oVGA_B[9:2];
 
 //D5M read 
 always@(posedge D5M_PIXLCLK)
 begin
-	rCCD_DATA[0]	<=	D5M_D;
-	rCCD_LVAL[0]	<=	D5M_LVAL;
-	rCCD_FVAL[0]	<=	D5M_FVAL;
-	rCCD_DATA[1]	<=	rCCD_DATA[0];
-	rCCD_LVAL[1]	<=	rCCD_LVAL[0];
-	rCCD_FVAL[1]	<=	rCCD_FVAL[0];
-	rCCD_DATA[2]	<=	rCCD_DATA[1];
-	rCCD_LVAL[2]	<=	rCCD_LVAL[1];
-	rCCD_FVAL[2]	<=	rCCD_FVAL[1];
+	rCCD_DATA	<=	D5M_D;
+	rCCD_LVAL	<=	D5M_LVAL;
+	rCCD_FVAL	<=	D5M_FVAL;
 end
 
 
@@ -191,9 +301,9 @@ CCD_Capture			u3	(
 							.oX_Cont(X_Cont),
 							.oY_Cont(Y_Cont),
 							.oFrame_Cont(Frame_Cont),
-							.iDATA(rCCD_DATA[0]),
-							.iFVAL(rCCD_FVAL[0]),
-							.iLVAL(rCCD_LVAL[0]),
+							.iDATA(rCCD_DATA),
+							.iFVAL(rCCD_FVAL),
+							.iLVAL(rCCD_LVAL),
 							.iSTART(!KEY[3]|auto_start),
 							.iEND(!KEY[2]),
 							.iCLK(~D5M_PIXLCLK),
@@ -201,40 +311,45 @@ CCD_Capture			u3	(
 						   );
 //D5M raw date convert to RGB data
 
+wire [11:0] RG_RED, RG_GREEN, RG_BLUE;
+wire [11:0] pro_CCD_R, pro_CCD_G, pro_CCD_B;
+
 RAW2GRAY				u4	(	
 							.iCLK(D5M_PIXLCLK),
 							.iRST(DLY_RST_1),
 							.iDATA(mCCD_DATA),
 							.iDVAL(mCCD_DVAL),
-//							.oRed(dCCD_R),
-							.oGrey(dCCD_G),
-//							.oBlue(dCCD_B),
-							.oDVAL(dCCD_DVAL),
+							.oRed(RG_RED),
+							.oGreen(RG_GREEN),
+							.oBlue(RG_BLUE),
+							.oDVAL(RG_VAL),
 							.iX_Cont(X_Cont),
 							.iY_Cont(Y_Cont)
 						   );
 
-						   assign	dCCD_R = dCCD_G;
-						   assign	dCCD_B = dCCD_G;
-						   
-imgproc				u4a	(
-							.iCLK(D5M_PIXLCLK),
-							.iRST(DLY_RST_1),
-							.iDATA(mCCD_DATA),
-							.iDVAL(mCCD_DVAL),
-							.oRed(pCCD_R),
-							.oGreen(pCCD_G),
-							.oBlue(pCCD_B),
-							.oDVAL(pCCD_DVAL),
-							.iX_Cont(X_Cont),
-							.iY_Cont(Y_Cont),
-							.iSW(SW[3])
-							);
+imgproc u_imgproc (
+    .iCLK       (D5M_PIXLCLK),
+    .iRST       (DLY_RST_1),
+    .iDATA      (RG_RED),
+    .iDVAL      (RG_VAL),
+    .oRed       (pro_CCD_R),
+    .oGreen     (pro_CCD_G),
+    .oBlue      (pro_CCD_B),
+    .oDVAL      (pro_CCD_DVAL),
+    .iX_Cont    (X_Cont),
+    .iY_Cont    (Y_Cont),
+    .iSW        (SW[2])
+);
 
-assign {sCCD_R,sCCD_G,sCCD_B,sCCD_DVAL}=SW[2]?{dCCD_R,dCCD_G,dCCD_B,dCCD_DVAL}:{pCCD_R,pCCD_G,pCCD_B,pCCD_DVAL};
-							
+assign {sCCD_R, sCCD_G, sCCD_B, sCCD_DVAL} = SW[4] ? {pro_CCD_R, pro_CCD_G, pro_CCD_B, pro_CCD_DVAL} : {RG_RED, RG_GREEN, RG_BLUE, RG_VAL};
+
+// assign sCCD_R = pro_CCD_R;
+// assign sCCD_G = pro_CCD_G;
+// assign sCCD_B = pro_CCD_B;
+// assign sCCD_DVAL = pro_CCD_DVAL;
+
 //Frame count display
-SEG7_LUT_6 			u5	(
+SEG7_LUT_6 			u5	(	
 							.oSEG0(HEX0),.oSEG1(HEX1),
 							.oSEG2(HEX2),.oSEG3(HEX3),
 							.oSEG4(HEX4),.oSEG5(HEX5),
@@ -266,7 +381,6 @@ Sdram_Control	   u7	(	//	HOST Side
 						   .WR1_LENGTH(8'h50),
 		               .WR1_LOAD(!DLY_RST_0),
 							.WR1_CLK(~D5M_PIXLCLK),
-							.WR1_FULL(LEDR[1]),
 
 							//	FIFO Write Side 2
 							.WR2_DATA({1'b0,sCCD_G[6:2],sCCD_R[11:2]}),
@@ -276,7 +390,6 @@ Sdram_Control	   u7	(	//	HOST Side
 							.WR2_LENGTH(8'h50),
 							.WR2_LOAD(!DLY_RST_0),				
 							.WR2_CLK(~D5M_PIXLCLK),
-							.WR2_FULL(LEDR[2]),
 
                      //	FIFO Read Side 1
 						   .RD1_DATA(Read_DATA1),
